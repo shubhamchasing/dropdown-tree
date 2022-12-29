@@ -46,27 +46,44 @@ const treeData = [
 ];
 
 function App() {
-
   const [data, setData] = useState(treeData);
 
   const handleOnChange = (key, value) => {
+    const evaluate = (arr, key, value) => {
+      console.log(key)
+      const length = key.length;
+      const newData = arr.map((curr) => {
+        if (key === curr.key) {
+          curr.isChecked = !value;
+          if (Object.hasOwn(curr, "children")) {
+            evaluate(curr.children, key, curr.isChecked);
+          }
+        } else if (curr.key.slice(0, length) === key) {
+          curr.isChecked = value;
+          if (Object.hasOwn(curr, "children")) {
+            evaluate(curr.children, key, curr.isChecked);
+          }
+        } else if (Object.hasOwn(curr, "children") && key !== curr.key) {
+          evaluate(curr.children, key, value);
+        }
+        return curr
+      });
+      return newData
+    };
 
-    const level = key.split('-').length
-    const parent  = 1
-    
-   
+    setData(
+      evaluate(data, key, value)
+    );
   };
 
   return (
     <div className="App">
-      <Tree treeData={data}></Tree>
+      <Tree treeData={data} handleOnChange = {handleOnChange}></Tree>
     </div>
   );
 }
 
 export default App;
-
-
 
 // const newData = data.reduce((curr, acc) =>{
 //   const currLevel = curr.key.split('-').length
@@ -83,7 +100,7 @@ export default App;
 //     if (currLevel > level){
 
 //     }
-    
+
 //   }
-  
+
 // },[])
