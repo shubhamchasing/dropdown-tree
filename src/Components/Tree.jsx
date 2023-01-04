@@ -1,28 +1,23 @@
-import React, { Component } from "react";
 import { useState } from "react";
 
-const Tree = ({ treeData = [], handleOnChange }) => {
-    console.log('dfgggg',treeData)
+const Tree = (props) => {
+    
   return (
     <div className="container">
       <ul className="tree">
-        {treeData.map((node) => {
-          return <TreeNode node={node} key={node.key} handleOnChange = {handleOnChange} />;
+        {props.treeData.map((node) => {
+          return <TreeNode node={node} key={node.key} handleOnChange={props.handleOnChange}/>;
         })}
       </ul>
     </div>
   );
 };
 
-const TreeNode = ({ node = {}, handleOnChange }) => {
-  console.log('node',node)
+const TreeNode = (props) => {
+  const [childVisible, setChildVisiblity] = useState(false)
 
-  const [childVisible, setChildVisiblity] = useState(false);
-
-
-  const hasChild = node.children ? true : false;
+  const hasChild = props.node.children ? true : false;
   return (
-    
     <li className="tree-node">
       <div className="box">
         {hasChild && (
@@ -33,18 +28,17 @@ const TreeNode = ({ node = {}, handleOnChange }) => {
         <input
           className="checkbox"
           type="checkbox"
-          checked={node.isChecked}
-          key = {node.key}
+          checked={props.node.isChecked}
           onChange={(e) => {
-            handleOnChange(node.key,node.isChecked);
+            props.handleOnChange(props.node.key, !props.node.isChecked)
           }}
         />
-        <div>{node.title}</div>
+        <div>{props.node.title}</div>
       </div>
 
       {hasChild && childVisible && (
         <ul className="tree">
-          <Tree treeData={node.children} handleOnChange = {handleOnChange}/>
+          <Tree treeData={props.node.children} handleOnChange={props.handleOnChange}/>
         </ul>
       )}
     </li>
@@ -52,64 +46,3 @@ const TreeNode = ({ node = {}, handleOnChange }) => {
 };
 
 export default Tree;
-
-
-
-// import React, { Component } from "react";
-// import { useState } from "react";
-
-// const Tree = ({ treeData = [],parentCheck = false }) => {
-    
-//   return (
-//     <div className="container">
-//       <ul className="tree">
-//         {treeData.map((node) => {
-//           return <TreeNode node={node} key={node.key}  parentCheck={parentCheck}/>;
-//         })}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// const TreeNode = ({ node = [] , parentCheck = false}) => {
-//   const [isChecked, setIsChecked] = useState(false);
-
-//   const [childVisible, setChildVisiblity] = useState(false);
-
-//   const handleOnChange = () => {
-//     setIsChecked((v) => !v)
-//     console.log(parentCheck)
-//   };
-
-//   const hasChild = node.children ? true : false;
-//   console.log("check");
-  
-//   return (
-//     <li className="tree-node">
-//       <div className="box">
-//         {hasChild && (
-//           <div onClick={(e) => setChildVisiblity(!childVisible)}>
-//             <i className={`arrow-${childVisible ? "down" : "right"}`} />
-//           </div>
-//         )}
-//         <input
-//           className="checkbox"
-//           type="checkbox"
-//           checked={isChecked || parentCheck}
-//           onChange={(e) => {
-//             handleOnChange(e);
-//           }}
-//         />
-//         <div>{node.title}</div>
-//       </div>
-
-//       {hasChild && childVisible && (
-//         <ul className="tree">
-//           <Tree treeData={node.children} parentCheck = {isChecked} />
-//         </ul>
-//       )}
-//     </li>
-//   );
-// };
-
-// export default Tree;

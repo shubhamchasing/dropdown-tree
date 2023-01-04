@@ -5,12 +5,16 @@
   font-family: "Public Sans", sans-serif;
 }
 
+.App{
+  margin: 2em;
+}
+
+
 .tree {
   display: flex;
   flex-direction: column;
   list-style: none;
-}
-.tree-node {
+  justify-content: center;
 }
 
 .box {
