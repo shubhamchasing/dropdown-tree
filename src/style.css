@@ -39,3 +39,18 @@
 .checkbox {
   cursor: pointer;
 }
+.isIndeterminate::after {
+  background-color: blue;
+  content: "";
+  color: white;
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-top: 0.5em;
+  margin-left: 0.18em;
+  
+  
+}
+/* .checkbox:checked + .isIndeterminate{
+  display: inline;
+} */

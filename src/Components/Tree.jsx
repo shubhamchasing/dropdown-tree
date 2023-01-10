@@ -15,9 +15,10 @@ const Tree = (props) => {
 
 const TreeNode = (props) => {
   const [childVisible, setChildVisiblity] = useState(false)
-
+  const isIndeterminate =  props.node.isIndeterminate ? 'isIndeterminate' : ''
   const hasChild = props.node.children ? true : false;
   return (
+    
     <li className="tree-node">
       <div className="box">
         {hasChild && (
@@ -26,9 +27,10 @@ const TreeNode = (props) => {
           </div>
         )}
         <input
-          className="checkbox"
+          className= {`checkbox ${isIndeterminate}`}
           type="checkbox"
           checked={props.node.isChecked}
+          
           onChange={(e) => {
             props.handleOnChange(props.node.key, !props.node.isChecked)
           }}

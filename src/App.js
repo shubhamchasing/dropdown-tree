@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './style.css';
+import "./style.css";
 
 import Tree from "./Components/Tree";
 import { useState } from "react";
@@ -10,25 +10,53 @@ const treeData = [
     title: "0-0",
     key: "0-0",
     isChecked: false,
+    isIndeterminate: false,
     children: [
       {
         title: "0-0-0",
         key: "0-0-0",
 
         isChecked: false,
+        isIndeterminate: false,
         children: [
           {
             title: "0-0-0-0",
             key: "0-0-0-0",
             isChecked: false,
+            isIndeterminate: false,
             children: [
-              { title: "0-0-0-0-0", key: "0-0-0-0-0", isChecked: false },
-              { title: "0-0-0-0-1", key: "0-0-0-0-1", isChecked: false },
-              { title: "0-0-0-0-2", key: "0-0-0-0-2", isChecked: false },
+              {
+                title: "0-0-0-0-0",
+                key: "0-0-0-0-0",
+                isChecked: false,
+                isIndeterminate: false,
+              },
+              {
+                title: "0-0-0-0-1",
+                key: "0-0-0-0-1",
+                isChecked: false,
+                isIndeterminate: false,
+              },
+              {
+                title: "0-0-0-0-2",
+                key: "0-0-0-0-2",
+                isChecked: false,
+                isIndeterminate: false,
+              },
             ],
           },
-          { title: "0-0-0-1", key: "0-0-0-1", isChecked: false },
-          { title: "0-0-0-2", key: "0-0-0-2", isChecked: false },
+          {
+            title: "0-0-0-1",
+            key: "0-0-0-1",
+            isChecked: false,
+            isIndeterminate: false,
+          },
+          {
+            title: "0-0-0-2",
+            key: "0-0-0-2",
+            isChecked: false,
+            isIndeterminate: false,
+          },
         ],
       },
       {
@@ -36,16 +64,33 @@ const treeData = [
         key: "0-0-1",
 
         isChecked: false,
+        isIndeterminate: false,
         children: [
-          { title: "0-0-1-0", key: "0-0-1-0", isChecked: false },
-          { title: "0-0-1-1", key: "0-0-1-1", isChecked: false },
-          { title: "0-0-1-2", key: "0-0-1-2", isChecked: true },
+          {
+            title: "0-0-1-0",
+            key: "0-0-1-0",
+            isChecked: false,
+            isIndeterminate: false,
+          },
+          {
+            title: "0-0-1-1",
+            key: "0-0-1-1",
+            isChecked: false,
+            isIndeterminate: false,
+          },
+          {
+            title: "0-0-1-2",
+            key: "0-0-1-2",
+            isChecked: false,
+            isIndeterminate: false,
+          },
         ],
       },
       {
         title: "0-0-2",
         key: "0-0-2",
         isChecked: false,
+        isIndeterminate: false,
       },
     ],
   },
@@ -53,6 +98,7 @@ const treeData = [
     title: "0-1",
     key: "0-1",
     isChecked: true,
+    isIndeterminate: false,
   },
 ];
 
@@ -63,15 +109,23 @@ function App() {
     let numberOfChildren = 0;
     let numberOfTrueValues1 = 0;
     let numberOfTrueValues2 = 0;
+    let numberOfIndeterminateValues = 0;
+    let indeterminate = false;
     data.forEach((each) => {
       if (each.children) {
-        numberOfTrueValues1 = evaluation(each.children);
+        [numberOfTrueValues1, indeterminate] = evaluation(each.children);
         numberOfChildren = each.children.length;
         if (numberOfChildren === numberOfTrueValues1) {
           each.isChecked = true;
+          each.isIndeterminate = false;
           numberOfTrueValues2 += 1;
+        } else if (numberOfTrueValues1 === 0 && !indeterminate) {
+          each.isChecked = false;
+          each.isIndeterminate = false;
         } else {
           each.isChecked = false;
+          each.isIndeterminate = true;
+          numberOfIndeterminateValues += 1;
         }
       } else {
         if (each.isChecked) {
@@ -81,7 +135,12 @@ function App() {
       }
     });
 
-    return numberOfChildren === 0 ? numberOfTrueValues1 : numberOfTrueValues2;
+    if (numberOfIndeterminateValues > 0) indeterminate = true;
+
+    return [
+      numberOfChildren === 0 ? numberOfTrueValues1 : numberOfTrueValues2,
+      indeterminate,
+    ];
   };
 
   const changeDataValues = (value, currentData) => {
@@ -161,4 +220,49 @@ export default App;
 
 //   });
 //   return updatedData
+// };
+
+// const evaluation = (data) => {
+//   let numberOfChildren = 0;
+//   let numberOfTrueValues1 = 0;
+//   let numberOfTrueValues2 = 0;
+//   // let indeterminate = false;
+//   let numberOfIndeterminateValues = 0;
+//   data.forEach((each) => {
+//     if (each.children) {
+//       [numberOfTrueValues1, numberOfIndeterminateValues] = evaluation(
+//         each.children
+//       );
+//       //  console.log(indeterminate);
+//       numberOfChildren = each.children.length;
+//       // each.isIndeterminate = indeterminate;
+//       // console.log(each.isIndeterminate);
+//       if (numberOfChildren === numberOfTrueValues1) {
+//         each.isChecked = true;
+//         each.isIndeterminate = false;
+//         numberOfTrueValues2 += 1;
+//         //numberOfIndeterminateValues = 0
+//       } else if (numberOfTrueValues1 === 0 ) {
+//         each.isChecked = false;
+//         each.isIndeterminate = false;
+//         //numberOfIndeterminateValues = 0
+
+//       } else {
+//         each.isIndeterminate = true;
+//         each.isChecked = false;
+//         numberOfIndeterminateValues += 1;
+//       }
+//       // indeterminate = each.isIndeterminate;
+//     } else {
+//       if (each.isChecked) {
+//         numberOfTrueValues1 += 1;
+//         numberOfTrueValues2 += 1;
+//       }
+//     }
+//   });
+
+//   return [
+//     numberOfChildren === 0 ? numberOfTrueValues1 : numberOfTrueValues2,
+//     numberOfIndeterminateValues,
+//   ];
 // };
